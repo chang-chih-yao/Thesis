@@ -4,8 +4,6 @@
 
 淺談VR、MR、AR 三種實境差異，如圖所示 \ref{fig:VR_MR_AR} 。VR：利用電腦技術模擬出一個立體、高擬真的3D空間，當使用者穿戴特殊顯示裝置 (VR 眼鏡) 進入後，會 產生好像處在現實中一般的錯覺 。在這空間中，操作者可以藉由控制器或鍵盤在這個虛擬的環境下穿梭或互動。MR：把現實世界與虛擬世界合併在一起，從而建立出一個新的環境以及符合一般視覺上所認知的虛擬影像，在這之中現實世界中的物件能夠與數位世界中的物件共同存在並且即時的產生互動。這就是Mixed Reality Game所帶來的魅力，你能感受到虛擬的回饋，也能與虛擬世界做互動。AR：一種將虛擬資訊擴增到現實空間中的技術，它不是要取代現實空間，而是在現實空間中添加一個虛擬物件，藉由攝影機的辨識技術與電腦程式的結合，當設定好的圖片出現在鏡頭裡面，就會出現對應的虛擬物件。
 
-在2015年，微軟發表了HoloLens(Mixture Reality Glass)
-
 \InsertFigure
 [label = {fig:VR_MR_AR},
 scale = 0.55,
@@ -13,6 +11,45 @@ caption = {VR, MR, AR and XR},
 align = center]
 {./context/introduction/images/VR_MR_AR.png}
 
+近幾年，實境的應用愈來愈多，隨之而來的設備也愈來愈多，如果所示 \ref{fig:HoloLens} ，像是在2015年微軟發表HoloLens(Mixture Reality Glass) 的最新開發者版本售價和遊戲配件訊息，引起了行業轟動。這款MR眼鏡在當時重新定義了遊戲互動的性質，當使用者戴上HoloLens後，不僅能看到真實世界場景(因為前方鏡片是透明的)，還能前方鏡片上看到虛擬影像，並且能讓使用者、真實世界、虛擬物件，三者可以互相互動，如果透過這種技術去開發遊戲，這會讓使用者體驗到全新的感受，除此之外，HoloLens還有強力的render運算能力，他能把遊戲中的特效或是3D物件即時的顯示，不像一些VR設備(例如VIVE)畫面都是透過PC端計算完才回傳給裝置。
+結合以上HoloLens的特殊性以及優點，我們想用HoloLens開發出一個多人混和實境的遊戲，但我們馬上就面臨一個問題：體感互動太少。HoloLens的體感互動只有手部而已，如果所示 \ref{fig:hand_gesture} 使用者想跟HoloLens互動只能透過這五種手部動作，很多人可能會覺得這樣的體感就已經夠了，但事實上這就跟你在PC透過滑鼠點擊東西是一樣的。
+
+\InsertFigures
+[label = {fig:HoloLens}, 
+perrow = 1, align = center, 
+caption = {(a) 微軟2015年發表的產品，HoloLens。 (b) HoloLens使用畫面示意圖。}] %
+{   
+	[scale = 0.08,align = center, caption={ } ]
+	{./context/introduction/images/HoloLens.png}
+}%
+{   
+	[scale = 0.6,align = center, caption={ } ]
+	{./context/introduction/images/HoloLens_Demo.png}
+}%
+
+\InsertFigure
+[label = {fig:hand_gesture},
+scale = 0.7,
+caption = {5 different gesture events: Bloom, Ready, Tap, Hold and Drag. },
+align = center]
+{./context/introduction/images/hand_gesture.png}
+
+那麼什麼才是具有豐富的體感呢？接下來要介紹的是Kinect這個體感裝置，一樣是微軟的產品。由下圖\ref{fig:kinect}我們可以看到kinect的構造，有一個紅外線發射器、一個RGB Camera、一個Depth Camera，它能利用Depth Camera捕捉玩家全身上下的3D pose，用身體當作控制器來進行遊戲，帶給玩家"免控制器的遊戲與娛樂體驗"，藉此來達到豐富的體感的效果。使用的效果如下圖，只需讓Kinect拍到全身，並且站在適當距離(1公尺~5公尺)就可以開始進行體感互動。
+
+\InsertFigures
+[label = {fig:kinect}, 
+perrow = 1, align = center, 
+caption = {(a) 微軟2010年發表的產品，Kinect。 (b) Kinect使用畫面示意圖。}] %
+{   
+	[scale = 0.6,align = center, caption={ } ]
+	{./context/introduction/images/Kinect.png}
+}%
+{   
+	[scale = 0.6,align = center, caption={ } ]
+	{./context/introduction/images/Kinect_Demo.png}
+}%
+
+這個裝置帶來的體感效果遠比HoloLens來的好
 
 % ------------------------------------------------
 \EndChapter
