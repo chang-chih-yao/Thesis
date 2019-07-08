@@ -1,0 +1,62 @@
+% ------------------------------------------------
+\StartChapter{System Framework}{chapter:system-framework}
+% ------------------------------------------------
+
+\section{Overview our system}
+
+\InsertFigure
+[label = {fig:Scenario},
+scale = 0.6,
+caption = {Scenario for two player motion sensing game.},
+align = center]
+{./context/system-framework/images/Scenario.png}
+
+遊戲系統架構圖如上\ref{fig:Scenario}，雖然我們的體感互動遊戲系統可以提供多人一起使用，但由於 HoloLens 數量有限，因此本篇論文主要探討兩人的遊戲互動。圖中的灰色長方形區域就是我們場地，長8m 寬6m，當兩人戴著 HoloLens 看著對方的時候，為了要讓 HoloLens camera 拍攝到對方全身畫面，兩人至少要距離 5m 以上，再加上周圍角落還需放置四台外部 camera，因此場地的長度需要大於8m比較適當。
+圖中兩台 HoloLens 分別透過 WIFI 與 Game Server 連接，四台外部 camera 分別透過 USB 與 Auxiliary Server 連接，Auxiliary Server 再透過 WIFI 把資訊傳給 Game Server。Auxiliary Server 負責接收四台外部camera的影像資訊，並透過 deep learning 技術先進行 human detection，偵測一個畫面中有幾個人，並且框出每個人在畫面中的位置(bounding box)，接著透過 human tracking 追蹤每個人的 bounding box，確認誰是 player 1 誰是 player 2，最後再把 bounding box 的畫面送到 action recognition model 中分類 action。Game Server 負責接收兩台 HoloLens 的影像資訊，並透過 deep learning 技術進行 pose estimation，偵測畫面中人物的骨架資訊，包含頭部、肩膀、手肘、手腕、膝蓋、腳踝...等關鍵部位，最後再透過 action recognition 辨識出動作，並在特定關節點畫出特效。
+
+\InsertFigure
+[label = {fig:Flow_Chart},
+scale = 0.7,
+caption = {Flow chart for two player motion sensing game.},
+align = center]
+{./context/system-framework/images/Flow_Chart.png}
+
+整個遊戲系統流程圖如上\ref{fig:Flow_Chart}，主要由三個部分組成：Auxiliary Server(紫色框), Game Server(紅色框), HoloLens Player(橘色框)，彼此之間皆由 streaming(灰色箭頭) 互相傳遞資訊。
+首先 HoloLens 拍到對方全身畫面，透過 streaming 傳回 Game Server，Game Server 會有兩個 model, Pose Estimation Network and Action Recognition Network 分別預測出對方的 Pose(x, y) 以及 Action(class)，Game Server 再把 Pose 跟 Action 透過 streaming 傳給 HoloLens，HoloLens 接收到資訊後利用 Unity 在特定的關節點上 render 出招式特效。以上圖為例，我們要 render 出螺旋丸的招式，並讓這個特效畫在對方的右手手掌上。
+但如果在 Game Server 裡面發現 HoloLens 傳過來的影像資訊無法偵測到人，那麼代表我方沒有看著對方，此時就需要 Auxiliary Server 的幫忙，Auxiliary Server 無時無刻都在做 human detection, human tracking, action recognition，並把四台 camera 分析完的結果做 fusion 得到一組 playerID and action，當遇到 Game Server trigger "No human" 時會立刻回傳 playerID and action 到 Game Server，Game Server 就能整合這些資訊傳給 HoloLens。此外 Game Server 內還有一個 Game System，負責計算雙方的血量、招式傷害、遊戲輸贏機制...等等。
+
+\section{Game System}
+
+在 Game System 裡面我們使用了兩個 deep learning 技術，分別是 predict pose 的 Pose Estimation Network、predict action 的 Action Recognition Network。為了要讓我們的系統整體能達到 real-time，每個系統中的 component 都要慎選，盡量不讓任何一個 component 成為 bottleneck，因此這兩個 deep learning model 我們都會在準確率以及運行速度去衡量要挑選的 model。
+
+在 Chapter 2 介紹了 Pose Estimation Network 相關研究，由於我們的遊戲系統是即時多人體感互動，因此我們會選擇 multi-person pose estimation model，其中又分成 Top-down 跟 Bottom-up 兩種面向，目前比較知名的 model 中 Bottom-up 的速度會比 Top-down 快，所以最後我們選擇 OpenPose 作為我們系統中 pose estimation 的 model。雖然 OpenPose 的運行速度已經比其他 model 略快一點，但還是無法達到 real-time，所以我們最後在 github 上面找到輕量版 OpenPose，使用 GTX 1060 能跑出 31 FPS 的速度。Multi-person pose estimation model 的比較如下\ref{tab:pose_estimation_model}。
+
+\begin{table}[htbp]
+	\caption{The experiment about different pose estimation model performances.}
+	\label{tab:pose_estimation_model}
+	\begin{center}
+		\begin{tabular}{c|c|c}
+			\hline \hline
+			Model & AP & FPS\\
+			\hline
+			Mask RCNN & 62.7 & 5 \\
+			OpenPose(CMU) & 58.4 & 4.0 \\
+			OpenPose(Mobilenet-Large) & \textbf{32.3} & \textbf{31}\\
+			OpenPose(Mobilenet-Small) & 17.3 & 35 \\
+			\hline \hline						
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\InsertFigure
+[label = {fig:my_TSN_model},
+scale = 0.55,
+caption = {Modified TSN model.},
+align = center]
+{./context/system-framework/images/my_TSN_model.png}
+
+在 Chapter 2 介紹了 Action Recognition Network 相關研究，有提到這篇論文會使用改良自 TSN 的 model 如上圖所示\ref{fig:my_TSN_model}，在架構上我們移除了 "Temporal ConvNet"，也就是 input data 只有 RGB 影像，沒有 optical flow 影像，少了 optical flow 能大幅提升 TSN predict 速度，損失的準確率只有一些。內部的 CNN model 原論文使用 BN Inception，我們則改用 Resnet-34 來提取 RGB image feature。在 Data augmentation 也改良成適合我們 dataset 的模式，原論文有使用 "Horizontal Flip"，我們最後把它移除了，因為我們的 action(像是螺旋丸) 有左右之分，不能透過水平翻轉影像來讓 dataset 增強。
+
+% ------------------------------------------------
+\EndChapter
+% ------------------------------------------------

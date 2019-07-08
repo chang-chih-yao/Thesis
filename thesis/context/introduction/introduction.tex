@@ -2,7 +2,7 @@
 \StartChapter{Introduction}{chapter:introduction}
 % ------------------------------------------------
 
-淺談VR、MR、AR 三種實境差異，如圖所示 \ref{fig:VR_MR_AR} 。VR：利用電腦技術模擬出一個立體、高擬真的3D空間，當使用者穿戴特殊顯示裝置 (VR 眼鏡) 進入後，會 產生好像處在現實中一般的錯覺 。在這空間中，操作者可以藉由控制器或鍵盤在這個虛擬的環境下穿梭或互動。MR：把現實世界與虛擬世界合併在一起，從而建立出一個新的環境以及符合一般視覺上所認知的虛擬影像，在這之中現實世界中的物件能夠與數位世界中的物件共同存在並且即時的產生互動。這就是Mixed Reality Game所帶來的魅力，你能感受到虛擬的回饋，也能與虛擬世界做互動。AR：一種將虛擬資訊擴增到現實空間中的技術，它不是要取代現實空間，而是在現實空間中添加一個虛擬物件，藉由攝影機的辨識技術與電腦程式的結合，當設定好的圖片出現在鏡頭裡面，就會出現對應的虛擬物件。
+淺談 VR、MR、AR 三種實境差異，如圖所示 \ref{fig:VR_MR_AR} 。VR：利用電腦技術模擬出一個立體、高擬真的3D空間，當使用者穿戴特殊顯示裝置 (VR 眼鏡) 進入後，會 產生好像處在現實中一般的錯覺 。在這空間中，操作者可以藉由控制器或鍵盤在這個虛擬的環境下穿梭或互動。MR：把現實世界與虛擬世界合併在一起，從而建立出一個新的環境以及符合一般視覺上所認知的虛擬影像，在這之中現實世界中的物件能夠與數位世界中的物件共同存在並且即時的產生互動。這就是 Mixed Reality Game 所帶來的魅力，你能感受到虛擬的回饋，也能與虛擬世界做互動。AR：一種將虛擬資訊擴增到現實空間中的技術，它不是要取代現實空間，而是在現實空間中添加一個虛擬物件，藉由攝影機的辨識技術與電腦程式的結合，當設定好的圖片出現在鏡頭裡面，就會出現對應的虛擬物件。
 
 \InsertFigure
 [label = {fig:VR_MR_AR},
@@ -11,8 +11,8 @@ caption = {VR, MR, AR and XR},
 align = center]
 {./context/introduction/images/VR_MR_AR.png}
 
-近幾年，實境的應用愈來愈多，隨之而來的設備也愈來愈多，如果所示 \ref{fig:HoloLens} ，像是在2015年微軟發表HoloLens(Mixture Reality Glass) 的最新開發者版本售價和遊戲配件訊息，引起了行業轟動。這款MR眼鏡在當時重新定義了遊戲互動的性質，當使用者戴上HoloLens後，不僅能看到真實世界場景(因為前方鏡片是透明的)，還能前方鏡片上看到虛擬影像，並且能讓使用者、真實世界、虛擬物件，三者可以互相互動，如果透過這種技術去開發遊戲，這會讓使用者體驗到全新的感受，除此之外，HoloLens還有強力的render運算能力，他能把遊戲中的特效或是3D物件即時的顯示，不像一些VR設備(例如VIVE)畫面都是透過PC端計算完才回傳給裝置。
-結合以上HoloLens的特殊性以及優點，我們想用HoloLens開發出一個多人混和實境的遊戲，但我們馬上就面臨一個問題：體感互動太少。HoloLens的體感互動只有手部而已，如果所示 \ref{fig:hand_gesture} 使用者想跟HoloLens互動只能透過這五種手部動作，很多人可能會覺得這樣的體感就已經夠了，但事實上這就跟你在PC透過滑鼠點擊東西是一樣的。
+近幾年，實境的應用愈來愈多，隨之而來的設備也愈來愈多，如果所示 \ref{fig:HoloLens} ，像是在2015年微軟發表 HoloLens(Mixture Reality Glass) 的最新開發者版本售價和遊戲配件訊息，引起了行業轟動。這款 MR 眼鏡在當時重新定義了遊戲互動的性質，當使用者戴上 HoloLens 後，不僅能看到真實世界場景(因為前方鏡片是透明的)，還能前方鏡片上看到虛擬影像，並且能讓使用者、真實世界、虛擬物件，三者可以互相互動，如果透過這種技術去開發遊戲，這會讓使用者體驗到全新的感受，除此之外，HoloLens 還有強力的 render 運算能力，他能把遊戲中的特效或是 3D 物件即時的顯示，不像一些 VR 設備(例如VIVE)畫面都是透過 PC 端計算完才回傳給裝置。
+結合以上 HoloLens 的特殊性以及優點，我們便有了透過 HoloLens 開發出多人混和實境的遊戲的想法，但我們馬上就面臨一個問題：體感互動太少。HoloLens 的體感互動只有手部而已，如果所示 \ref{fig:hand_gesture} 使用者想跟 HoloLens 互動只能透過這五種手部動作，很多人可能會覺得這樣的體感就已經夠了，但事實上這就跟你在PC透過滑鼠點擊東西是一樣的，在這種"弱體感"模式之下，不管是遊戲性或是遊戲體驗都會明顯不足。
 
 \InsertFigures
 [label = {fig:HoloLens}, 
@@ -34,7 +34,9 @@ caption = {5 different gesture events: Bloom, Ready, Tap, Hold and Drag. },
 align = center]
 {./context/introduction/images/hand_gesture.png}
 
-那麼什麼才是具有豐富的體感呢？接下來要介紹的是Kinect這個體感裝置，一樣是微軟的產品。由下圖\ref{fig:kinect}我們可以看到kinect的構造，有一個紅外線發射器、一個RGB Camera、一個Depth Camera，它能利用Depth Camera捕捉玩家全身上下的3D pose，用身體當作控制器來進行遊戲，帶給玩家"免控制器的遊戲與娛樂體驗"，藉此來達到豐富的體感的效果。使用的效果如下圖，只需讓Kinect拍到全身，並且站在適當距離(1公尺~5公尺)就可以開始進行體感互動。
+\newpage
+
+那麼什麼才是具有豐富的體感呢？接下來要介紹的是強體感裝置 Kinect，同樣是微軟的產品。由下圖\ref{fig:kinect}我們可以了解 Kinect 的構造，配有一個紅外線發射器、一個 RGB camera、一個 depth camera，它能利用 depth camera 即時捕捉玩家全身上下的 3D pose，用身體當作控制器來進行遊戲，帶給玩家"免控制器的遊戲與娛樂體驗"，藉此來達到豐富的體感的效果。使用的效果如下圖所示，只需讓 Kinect 拍到全身，並且站在適當距離(1公尺~5公尺)便可以開始進行體感互動。
 
 \InsertFigures
 [label = {fig:kinect}, 
@@ -46,10 +48,32 @@ caption = {(a) 微軟2010年發表的產品，Kinect。 (b) Kinect使用畫面�
 }%
 {   
 	[scale = 0.6,align = center, caption={ } ]
-	{./context/introduction/images/Kinect_Demo.png}
+	{./context/introduction/images/Kinect_Demo.png} 
 }%
 
-這個裝置帶來的體感效果遠比HoloLens來的好
+\newpage
+
+Kinect 裝置所提供的體感效果較 HoloLens 強，但其成本昂貴且體積大不易攜帶，HoloLens 前方也有 depth camera，但由於 FPS 只有1，無法達到即時的體感互動。故在多人混和實境遊戲的開發過程中，我們最後選擇利用 HoloLens 前方 RGB Camera來取代 Kinect 強體感效果，透過 Deep Learning 技術分析 RGB image 中人物的 pose 以及 action，讓使用者也能在 MR 世界享有強體感的效果。因此我們系統初步的概念是讓兩位玩家都配戴 HoloLens 並且彼此看著對方，此時雙人體感互動系統就可以成立，因為自己的體感是由對方的 HoloLens camera 所驅動，只需把兩台 HoloLens camera 拍攝的影像串流到 server 上進行 pose estimation and action recognition 就能實現即時多人體感互動系統。
+
+\InsertFigure
+[label = {fig:my_scene},
+scale = 0.7,
+caption = {Overview of our system. },
+align = center]
+{./context/introduction/images/my_scene.png}
+
+本論文的目標為開發以 HoloLens 體驗多人對戰之遊戲架構，每位玩家穿戴 HoloLens 彼此看著對方，並讓 HoloLens camera 拍攝對手的肢體動作，透過 wifi 將影像傳送至運算伺服器，根據預訓練之深度類神經網路模型估測出對手的 2D 人體姿態與動作類別，根據目前做的動作類別，在定義好的骨架節點觸發相對應的特效，將觸發節點之位置與對應特效的資訊傳回 HoloLens 端，由 HoloLens 繪製特效，產生虛實對應的 MR 效果。
+但這個系統存在一個漏洞，由於我們的體感是建立在雙方的 HoloLens camera 影像，如果其中某一方沒有看著對方，也就是某一方的 HoloLens camera 影像沒有拍攝到對方，此時系統會喪失某一方的體感，為了解決這個問題我們在場地周圍架設了4台外部 camera，如上圖所示\ref{fig:my_scene}。有了4台外部 camera就能彌補上述的問題，於是我們稱這4台外部 camera 為 Auxiliary Server，而本身的2台 HoloLens 為 Game Server。由下圖可以看出，我們設計的多人混和實境體感互動遊戲系統，兩位使用者只須配戴好 HoloLens 即可開始進行雙人對戰遊戲。例如圖中的 Player 1 嘗試做火影忍者中的"螺旋丸"招式，而 Player 2 看到對方發動攻擊所以嘗試做出防禦的動作，此時在雙方的HoloLens便能即時的產生對方招式的特效，藉此達到即時雙人戰鬥的遊戲。
+
+建立此系統的主要challenges：
+1. 為了讓HoloLens顯示的特效與真實世界疊合，我們必須要知道對方與HoloLens的距離。
+2. 由於此系統必須要實現real-time，所以必須要讓系統每個component盡量縮短耗時，因此我們不能使用準確率很高，但耗時很多的model。CPU：i7-7700K、GPU：GTX 1060、RAM：16G。FPS：25
+3. 對戰遊戲的招式是我們獨創的，因此沒有相對應的dataset，必須自己蒐集dataset
+
+Our contributions：
+1. We build multi-interaction game based on HoloLens.
+2. Design a light-weight action recognition model for our system.
+3. We collect the action recognition data based on our HoloLens and outside cameras.
 
 % ------------------------------------------------
 \EndChapter
