@@ -57,6 +57,48 @@ align = center]
 
 在 Chapter 2 介紹了 Action Recognition Network 相關研究，有提到這篇論文會使用改良自 TSN 的 model 如上圖所示\ref{fig:my_TSN_model}，在架構上我們移除了 "Temporal ConvNet"，也就是 input data 只有 RGB 影像，沒有 optical flow 影像，少了 optical flow 能大幅提升 TSN predict 速度，損失的準確率只有一些。內部的 CNN model 原論文使用 BN Inception，我們則改用 Resnet-34 來提取 RGB image feature。在 Data augmentation 也改良成適合我們 dataset 的模式，原論文有使用 "Horizontal Flip"，我們最後把它移除了，因為我們的 action(像是螺旋丸) 有左右之分，不能透過水平翻轉影像來讓 dataset 增強。
 
+\InsertFigure
+[label = {fig:Game_System},
+scale = 0.5,
+caption = {Game system.},
+align = center]
+{./context/system-framework/images/Game_System.png}
+
+在 Game Server 裡面有一個 Game System 負責計算雙方血量、招式傷害、招式有無命中對方、施放技能之後的硬直時間\footnote{硬直是指在動作類遊戲中某一個動作在發生後不可輸入指令操作的持續過程，也是某個技能發出後導致指令無效的時間}、遊戲輸贏機制、重啟遊戲。
+至於我們的傷害計算，我們把遊戲這設計成類似卡牌對戰遊戲，當對手使出 A 技能，自己只能使用防禦 A 技能的招式來防禦，如果用其他防禦招式還會是會被扣血。
+圖中\ref{fig:Game_System} Action P1 代表 Player 1 的 action，由於每個 frame 送到 Game Server 都會進行 predict，為了讓整個系統和特效更穩定，我們使用 sliding window 來判斷對方是否真的做出該動作，在任意連續 4 個 frame 的片段中，如果有某一個 action 出現超過 3 次，我們就讓這個 action 去 trigger 系統，系統就會把 action 資訊傳給 HoloLens 並 render 出特效，當招式一被 trigger 出來，Game System 便會暫停 1 秒來當作招式的硬直時間，避免我方或是對手連續不間斷出招。
+
+\newpage
+
+\section{Auxiliary System}
+
+\InsertFigure
+[label = {fig:Auxiliary_Register},
+scale = 0.5,
+caption = {Registration process for Auxiliary System.},
+align = center]
+{./context/system-framework/images/Auxiliary_Register.png}
+
+再回到整個遊戲系統流程圖\ref{fig:Flow_Chart}，前面我們有提到，因為我們的系統是建立在雙方都配戴著 HoloLens 並且互相看著對方，假如某一方的 HoloLens 並沒有拍攝到對方，或是從影像中偵測不到對方的存在，此時就必須依靠 Auxiliary System 的協助。
+首先要從四台外部 camera 的影像中辨識出 players 並且對他們做 tracking，這裡的 human detection 我們直接選擇 Tensorflow 內建的 Object Detection，採用 Faster RCNN 架構。至於 human tracking 一開始我們採用最簡易的演算法 Nearnest tracking，先透過 human detection 預測出 player bounding box，在一開始的時候初始化每個 player 的座標，我們可以陸續從每個 frame 得到每個 player 的座標，再把這些座標和一開始初始化的座標相互比較，找出距離最近的點更新自己的座標，藉此來達到tracking的效果。不過這演算法有很明顯的缺陷，當兩位 player 彼此交叉穿越的時候(過程中產生遮擋現象)，此演算法的 tracking 目標不會跟著穿越過去，因為它只會更新離自己最近的點，雖然有這個嚴重的問題，不過如果遊戲過程中有規定一些限制，可以避免兩位 player 彼此互相遮擋，這個演算法就很適合，不僅運行速度快，程式碼複雜度跟記憶體使用量都非常低。但為了讓使用者有更好的遊戲體驗，我們強化了遊戲系統的穩定性，最終 human tracking 採用 CNN(VGG16) 提取 players feature，用 feature 相似度來 tracking players。
+
+Human tracking 的流程如上圖所示\ref{fig:Auxiliary_Register}，初始化的方式是讓 players 在遊戲開始之前先進行註冊，註冊過程中每位 player 會分別站在四台外部 camera 都拍得到的位置進行 human detection 和 feature extraction，當每位 player 都註冊完成，Axuiliary Sytem 內也已經有了 players 的 feature data，此時就能開始進行 human tracking。
+
+\InsertFigure
+[label = {fig:Feature_Extraction},
+scale = 0.5,
+caption = {Feature extraction for human tracking.},
+align = center]
+{./context/system-framework/images/Feature_Extraction.png}
+
+藉由這張示意圖\ref{fig:Feature_Extraction}來說明如何提取兩位 player 的 feature，首先 player 1 先進行註冊提取 feature，四台外部 camera 拍到影像後送到 VGG16 裡面進行 feature extraction，VGG16 的 output layer 我們選擇此 model 中 CNN 模塊的最後一層，輸入 VGG16 的大小為一張 RGB image(3, 224, 224), 輸出為 feature(7, 7, 512)，所以四台 camera 在不同角度分別拍一張照片，提取的 feature 大小為 (4, 7, 7, 512)，player 1 總共被拍 N 次，所以我們總共擁有 player 1 的 feature 數為 (4N, 7, 7, 512)。以此類推，當 player 1 註冊完換 player 2 站在四台 camera 中間，總共被拍 M 次，所以我們總共擁有 player 1 的 feature 數為 (4M, 7, 7, 512)。最後將這兩個 feature stack 合成一個 Player Feature Stack 定義為 $F_{reg}^i, i=N+M$，大小為 ((4N+4M), 7, 7, 512)，到目前為止，兩位 player 都已經註冊完畢，接著開始進行 player feature 比對，進而達到 human tracking 的效果。
+
+當一位未知身分的 player 被四台外部 camera 拍到時，四張 RGB image 分別送到 VGG16 進行 featu extraction 產生出 4 個 feature 定義為 $F_{player}$，每個 feature 大小為 (7, 7, 512)，這 4 個 feature 分別跟 Player Feature Stack($F_{reg}^i, i=N+M$) 做 Euclidean destance 運算得到 input feature 與 Player Feature Stack 中所有 feature 的距離 $D=\left \| F_{player}-F_{reg}^i \right \|_2$，因此我們推斷這位 player 的ID為，$Player\ ID\ index=argmin_i(\left \| F_{player}-F_{reg}^i \right \|_2)$，離最小的 feature 就是我們的目標，取出該 feature 的 index 再判斷它是落在0~4N-1的區間還是4N~4N+4M-1的區間。
+
+再回到\ref{fig:Auxiliary_Register}，成功 human detection + human tracking 以後我們可以從四台camera的影像中得到八組 Player ID and bounding box(一台camera影像中會有兩組Player ID and bounding box，分別是兩位 player 和兩個 bounding box)，這八個 bounding box 畫面會被送到 action recognition Network (Modified TSN) 產生出八組 Player ID and Action，最後必須透過 voting 演算法得出兩組 Player ID and Action，例如 (Player 1, 螺旋丸), (Player 2, 防禦動作)。
+
+voting 演算法的前提是 human tracking 準確無誤，因此當我們發現在同一個畫面中出現兩個一樣的 Player ID 時，會把 Euclidean destance 較高的那位 player 改成另一位 player ID。當這八組 Player ID and bounding box 的 Player ID 數量相等時，我們會以 Player ID 作為分類，把這八組分成兩部分，一個部分全部都是 Player 1 的 action，另一個部分全部都是 Player 2 的 action，採取多數決，在同一位 player 裡面選出最多票數的 action 作為最終的 action。
+
 % ------------------------------------------------
 \EndChapter
 % ------------------------------------------------

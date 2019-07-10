@@ -65,6 +65,8 @@ align = center]
 本論文的目標為開發以 HoloLens 體驗多人對戰之遊戲架構，每位玩家穿戴 HoloLens 彼此看著對方，並讓 HoloLens camera 拍攝對手的肢體動作，透過 wifi 將影像傳送至運算伺服器，根據預訓練之深度類神經網路模型估測出對手的 2D 人體姿態與動作類別，根據目前做的動作類別，在定義好的骨架節點觸發相對應的特效，將觸發節點之位置與對應特效的資訊傳回 HoloLens 端，由 HoloLens 繪製特效，產生虛實對應的 MR 效果。
 但這個系統存在一個漏洞，由於我們的體感是建立在雙方的 HoloLens camera 影像，如果其中某一方沒有看著對方，也就是某一方的 HoloLens camera 影像沒有拍攝到對方，此時系統會喪失某一方的體感，為了解決這個問題我們在場地周圍架設了4台外部 camera，如上圖所示\ref{fig:my_scene}。有了4台外部 camera就能彌補上述的問題，於是我們稱這4台外部 camera 為 Auxiliary Server，而本身的2台 HoloLens 為 Game Server。由下圖可以看出，我們設計的多人混和實境體感互動遊戲系統，兩位使用者只須配戴好 HoloLens 即可開始進行雙人對戰遊戲。例如圖中的 Player 1 嘗試做火影忍者中的"螺旋丸"招式，而 Player 2 看到對方發動攻擊所以嘗試做出防禦的動作，此時在雙方的HoloLens便能即時的產生對方招式的特效，藉此達到即時雙人戰鬥的遊戲。
 
+以下部分找文正討論
+
 建立此系統的主要challenges：
 1. 為了讓HoloLens顯示的特效與真實世界疊合，我們必須要知道對方與HoloLens的距離。
 2. 由於此系統必須要實現real-time，所以必須要讓系統每個component盡量縮短耗時，因此我們不能使用準確率很高，但耗時很多的model。CPU：i7-7700K、GPU：GTX 1060、RAM：16G。FPS：25
