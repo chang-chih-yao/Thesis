@@ -11,7 +11,7 @@ caption = {VR, MR, AR and XR},
 align = center]
 {./context/introduction/images/VR_MR_AR.png}
 
-近幾年，實境的應用愈來愈多，隨之而來的設備也愈來愈多，如果所示 \ref{fig:HoloLens} ，像是在2015年微軟發表 HoloLens(Mixture Reality Glass) 的最新開發者版本售價和遊戲配件訊息，引起了行業轟動。這款 MR 眼鏡在當時重新定義了遊戲互動的性質，當使用者戴上 HoloLens 後，不僅能看到真實世界場景(因為前方鏡片是透明的)，還能前方鏡片上看到虛擬影像，並且能讓使用者、真實世界、虛擬物件，三者可以互相互動，如果透過這種技術去開發遊戲，這會讓使用者體驗到全新的感受，除此之外，HoloLens 還有強力的 render 運算能力，他能把遊戲中的特效或是 3D 物件即時的顯示，不像一些 VR 設備(例如VIVE)畫面都是透過 PC 端計算完才回傳給裝置。
+近幾年，實境的應用愈來愈多，隨之而來的設備也愈來愈多，如圖所示 \ref{fig:HoloLens} ，像是在2015年微軟發表 HoloLens(Mixture Reality Glass) 的最新開發者版本售價和遊戲配件訊息，引起了行業轟動。這款 MR 眼鏡在當時重新定義了遊戲互動的性質，當使用者戴上 HoloLens 後，不僅能看到真實世界場景(因為前方鏡片是透明的)，還能前方鏡片上看到虛擬影像，並且能讓使用者、真實世界、虛擬物件，三者可以互相互動，如果透過這種技術去開發遊戲，這會讓使用者體驗到全新的感受，除此之外，HoloLens 還有強力的 render 運算能力，他能把遊戲中的特效或是 3D 物件即時的顯示，不像一些 VR 設備(例如VIVE)畫面都是透過 PC 端計算完才回傳給裝置。
 結合以上 HoloLens 的特殊性以及優點，我們便有了透過 HoloLens 開發出多人混和實境的遊戲的想法，但我們馬上就面臨一個問題：體感互動太少。HoloLens 的體感互動只有手部而已，如果所示 \ref{fig:hand_gesture} 使用者想跟 HoloLens 互動只能透過這五種手部動作，很多人可能會覺得這樣的體感就已經夠了，但事實上這就跟你在PC透過滑鼠點擊東西是一樣的，在這種"弱體感"模式之下，不管是遊戲性或是遊戲體驗都會明顯不足。
 
 \InsertFigures
@@ -76,6 +76,10 @@ Our contributions：
 1. We build multi-interaction game based on HoloLens.
 2. Design a light-weight action recognition model for our system.
 3. We collect the action recognition data based on our HoloLens and outside cameras.
+
+\newpage
+
+In a sports game, when a violation or a foul event occurs, referees have to make judgments fairly, correctly, and immediately. To become a professional and convincing referee, one has to experience being the referee of several real and formal sports games to practice not only his/her immediate reaction but also the proficiency in Official Referee's Signals (ORSs). However, it is a rare opportunity for a new learner to be the referee of professional games because each game has only limited (one to three) referees and no team would like to be judged by novice referee. Therefore, we propose an ORS training system, which utilizes wearable sensors and deep learning techniques to provide the novice referees with more practicing opportunities. Fig. 1.1 illustrates the scenario of our referee training system. The user wears the Perception Neural \footnote{https://neuronmocap.com/} device, which contains 18 IMUs (Inertial Measurement Units), and watches the video of professional sports games annotated with ORS ground truth. When watching the video, the user can make an ORS freely according to his/her own judgment at any time, and our ORS recognition technique will detect and classify the user's gesture. After matching with the annotated ground truth, the training system will report the ORS correctness to the user and also give a warning if the user misses a violation or a foul event. In this work, we take basketball as an example to validate the proposed ORS training system.
 
 % ------------------------------------------------
 \EndChapter
